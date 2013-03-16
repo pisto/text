@@ -9,10 +9,10 @@ unsigned int random(uint modulo){							//just doing random%modulo is not unifor
 	unsigned int max = (0x100000000ULL/modulo)*modulo;		//round to integer number of modulo multiples
 	unsigned int r=0xFFFFFFFFU;
 	if(!max){												//if modulo is a power of 2 max is 0
-		source.read((char*)&r, 4);
+		source.read(reinterpret_cast<char*>(&r), 4);
 		return r%modulo;
 	}
-	while(r>=max) source.read((char*)&r, 4);				//otherwise it's non-zero, poll rng to get a random number in the range
+	while(r>=max) source.read(reinterpret_cast<char*>(&r), 4);				//otherwise it's non-zero, poll rng to get a random number in the range
 	return r%modulo;
 }
 
@@ -35,7 +35,7 @@ public:
 	unsigned int occurrences;
 	letter* nextletters;
 
-	constexpr const static letter* emptychain = (const letter*)emptychain_buff;
+	constexpr const static letter* emptychain = reinterpret_cast<const letter*>(emptychain_buff);
 	static letter* root;		//p(x)
 
 	static void addoccurrence(letter*& base, char val){
@@ -46,7 +46,7 @@ public:
 			base = (letter*)realloc(tot?base:0, sizeof(letter)*(tot+1)+1);		//if tot==0 then base==emptychain, which must not be reallocated
 			base[tot].val = val;
 			base[tot].occurrences = 1;
-			base[tot].nextletters = (letter*)emptychain;
+			base[tot].nextletters = const_cast<letter*>(emptychain);
 			base[tot+1].val = 0;
 		}
 	}
@@ -59,7 +59,7 @@ public:
 
 	letter* find(char val){
 		for(letter* cur = this; cur->val; cur++) if(cur->val == val) return cur;
-		return 0;
+		return nullptr;
 	}
 
 	letter* chooserandom(){
@@ -75,9 +75,9 @@ public:
 		if(val) delete[] nextletters;		//delete next only if I'm not a terminator
 	}
 
-}  __attribute__ ((packed));		//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
+}  __attribute__ ((packed));								//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
 
-letter* letter::root = (letter*)letter::emptychain;
+letter* letter::root = const_cast<letter*>(letter::emptychain);
 
 int main(){
 
