@@ -26,6 +26,7 @@ unsigned int random(uint modulo){							//just doing random%modulo is not unifor
 class letter{
 
 	const static char emptychain_buff = 0;	//Terminators (val == 0) have only one byte allocated, save 8 bytes on 32-bit machine.
+	constexpr static letter* emptychain = reinterpret_cast<letter*>(emptychain_buff);
 
 public:
 
@@ -35,8 +36,7 @@ public:
 	unsigned int occurrences;
 	letter* nextletters;
 
-	constexpr const static letter* emptychain = reinterpret_cast<const letter*>(emptychain_buff);
-	static letter* root;		//p(x)
+	static letter* newroot(){ return emptychain; }		//p(x)
 
 	static void addoccurrence(letter*& base, char val){
 		letter* l = base->find(val);
@@ -46,7 +46,7 @@ public:
 			base = (letter*)realloc(tot?base:0, sizeof(letter)*(tot+1)+1);		//if tot==0 then base==emptychain, which must not be reallocated
 			base[tot].val = val;
 			base[tot].occurrences = 1;
-			base[tot].nextletters = const_cast<letter*>(emptychain);
+			base[tot].nextletters = emptychain;
 			base[tot+1].val = 0;
 		}
 	}
@@ -79,11 +79,13 @@ public:
 
 }  __attribute__ ((packed));								//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
 
-letter* letter::root = const_cast<letter*>(letter::emptychain);
+
 
 int main(){
 
+	letter* root = letter::newroot();
+
 	//TODO
 
-	delete letter::root;
+	delete root;
 }
