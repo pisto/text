@@ -72,7 +72,9 @@ public:
 	}
 
 	~letter(){
-		if(val) delete[] nextletters;		//delete next only if I'm not a terminator
+
+		if(val && nextletters != emptychain)				//delete next only if I'm not a terminator and I point to a non empty chain
+			delete[] nextletters;
 	}
 
 }  __attribute__ ((packed));								//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
