@@ -25,7 +25,7 @@ unsigned int random(uint modulo){							//just doing random%modulo is not unifor
  */
 class letter{
 
-	constexpr const static char emptychain_buff = 0;	//Terminators (val == 0) have only one byte allocated, save 8 bytes on 32-bit machine.
+	const static char emptychain_buff = 0;	//Terminators (val == 0) have only one byte allocated, save 8 bytes on 32-bit machine.
 
 public:
 
@@ -63,16 +63,16 @@ public:
 	}
 
 	letter* chooserandom(){
-		unsigned int totaloccurrences = 0;
-		for(letter* cur = this; cur->val; totaloccurrences+=cur->occurrences, cur++);
-		unsigned int r = random(totaloccurrences);
+		unsigned int o = 0;
+		for(letter* cur = this; cur->val; o+=cur->occurrences, cur++);
+		o = random(o);
 		letter* cur = this;
-		for(; r>=cur->occurrences; r-=cur->occurrences, cur++);
+		for(; o>=cur->occurrences; o-=cur->occurrences, cur++);
 		return cur;
 	}
 
 	~letter(){
-		if(val) delete[] nextletters;
+		if(val) delete[] nextletters;		//delete next only if I'm not a terminator
 	}
 
 }  __attribute__ ((packed));		//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
