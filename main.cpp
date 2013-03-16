@@ -20,7 +20,7 @@ unsigned int random(uint modulo){							//just doing random%modulo is not unifor
  * Letters tree.
  * This structure is thought to be repeated in an array. A letter x in the array
  * represents p(x|s), where s is the precedent sequence of letters (and so arrays
- * that have been visited before).
+ * and their specific indexes that have been visited before).
  * The array is terminated like a C-string, with a letter with val = 0.
  */
 class letter{
@@ -43,7 +43,7 @@ public:
 		if(l) l->occurrences++;
 		else{
 			int tot = base->letterstotal();
-			base = (letter*)realloc(tot?base:0, sizeof(letter)*(tot+1)+1);
+			base = (letter*)realloc(tot?base:0, sizeof(letter)*(tot+1)+1);		//if tot==0 then base==emptychain, which must not be reallocated
 			base[tot].val = val;
 			base[tot].occurrences = 1;
 			base[tot].nextletters = (letter*)emptychain;
@@ -75,7 +75,7 @@ public:
 		if(val) delete[] nextletters;
 	}
 
-}  __attribute__ ((packed));
+}  __attribute__ ((packed));		//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
 
 letter* letter::root = (letter*)letter::emptychain;
 
