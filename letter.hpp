@@ -13,8 +13,8 @@
  */
 class letter{
 
-	const static char emptychain_buff = 0;	//Terminators (val == 0) have only one byte allocated, save 8 bytes on 32-bit machine.
-	constexpr static letter* emptychain = reinterpret_cast<letter*>(emptychain_buff);
+	static const char emptychain_buff;	//Terminators (val == 0) have only one byte allocated, save 8 bytes on 32-bit machine.
+	static letter* nochoice;
 
 	letter() = delete;
 
@@ -22,20 +22,25 @@ public:
 
 	char val;
 	unsigned int occurrences;
-	letter* nextletters;
+	letter* nextchoice;
 
-	static letter* newroot(){ return emptychain; }		//p(x)
+	static letter* newroot(){ return nochoice; }		//p(x)
 
-	static void addoccurrence(letter*& base, char val){
-		letter* l = base->find(val);
-		if(l) l->occurrences++;
+	static letter* addoccurrence(letter*& root, letter* lastletter, char val){
+		letter*& choice = reinterpret_cast<letter*&>(lastletter?lastletter->nextchoice:root);
+		letter* l = choice->find(val);
+		if(l){
+			l->occurrences++;
+			return l;
+		}
 		else{
-			int tot = base->letterstotal();
-			base = reinterpret_cast<letter*>(std::realloc(tot?base:0, sizeof(letter)*(tot+1)+1));		//if tot==0 then base==emptychain, which must not be reallocated
-			base[tot].val = val;
-			base[tot].occurrences = 1;
-			base[tot].nextletters = emptychain;
-			base[tot+1].val = 0;
+			int tot = choice->letterstotal();
+			choice = reinterpret_cast<letter*>(std::realloc(tot?choice:0, sizeof(letter)*(tot+1)+1));		//if tot==0 then base==emptychain, which must not be reallocated
+			choice[tot].val = val;
+			choice[tot].occurrences = 1;
+			choice[tot].nextchoice = nochoice;
+			choice[tot+1].val = 0;
+			return choice+tot;
 		}
 	}
 
@@ -59,11 +64,12 @@ public:
 		return cur;
 	}
 
-	~letter(){
-
-		if(val && nextletters != emptychain)				//delete next only if I'm not a terminator and I point to a non empty chain
-			delete[] nextletters;
+	void operator delete[](void* mem){
+		for(letter* cur = reinterpret_cast<letter*>(mem); cur->val && cur->nextchoice != nochoice; cur++) delete[] cur->nextchoice;
+		if(mem != nochoice) free(mem);
 	}
+
+	void operator delete(void* mem){ delete[] reinterpret_cast<letter*>(mem); }
 
 }  __attribute__ ((packed));								//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
 
