@@ -46,7 +46,7 @@ public:
 
 	int letterstotal(){
 		int i = 0;
-		for(const letter* cur = this; cur->val; cur++, i++);
+		for(letter* cur = this; cur->val; cur++, i++);
 		return i;
 	}
 
@@ -57,7 +57,7 @@ public:
 
 	letter* chooserandom(){
 		unsigned int o = 0;
-		for(const letter* cur = this; cur->val; o+=cur->occurrences, cur++);
+		for(letter* cur = this; cur->val; o+=cur->occurrences, cur++);
 		o = random(o);
 		letter* cur = this;
 		for(; o>=cur->occurrences; o-=cur->occurrences, cur++);
