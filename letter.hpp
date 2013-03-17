@@ -58,6 +58,7 @@ public:
 	letter* chooserandom(){
 		unsigned int o = 0;
 		for(letter* cur = this; cur->val; o+=cur->occurrences, cur++);
+		if(!o) return nullptr;
 		o = random(o);
 		letter* cur = this;
 		for(; o>=cur->occurrences; o-=cur->occurrences, cur++);
