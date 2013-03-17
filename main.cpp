@@ -98,10 +98,12 @@ int main(int argc, char** argv){
 			for(size_t i=0; i<bufflen; i++) lastinseq = (lastinseq?lastinseq->nextchoice:root)->find(buffer[prevseqlen-bufflen+i]);
 			letter* choice = lastinseq?lastinseq->nextchoice:root;	//lastinseq can be null when we begin writing the text
 			if(!choice->letterstotal()){
-				choice = root;			//this happens if the sequence at the end of the text is unique. Start over with p(x)
+				//this happens if the sequence at the end of the text is unique. Start over with p(x)
 				char prev[bufflen+1];
 				strncpy(prev, buffer+prevseqlen-bufflen, bufflen);
 				cerr<<"Warning: no choice of p(x|s) when s = "<<prev<<'\n';
+				bufflen = 0;
+				choice = root;
 			}
 			letter* chosen = choice->chooserandom();
 			cout<<chosen->val;
