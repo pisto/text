@@ -101,7 +101,7 @@ int main(int argc, char** argv){
 					real totoccs = choice->occurrencestotal();
 					for(letter* l = choice; l->val; l++){
 						real p = l->occurrences/totoccs;
-						tot-=p*log(p);
+						tot-=p*log(p)/LN2;
 					}
 					tot*=weigth;
 				}
@@ -118,7 +118,7 @@ int main(int argc, char** argv){
 			Sm;\
 		})
 		//k_m, 1<=m<=prevseqlen+1
-#define k(m) (-DSarray[(m)-1]+((m)==1?log(real(root->letterstotal())):DSarray[(m)-2]))
+#define k(m) (-DSarray[(m)-1]+((m)==1?log(real(root->letterstotal()))/LN2:DSarray[(m)-2]))
 
 		cerr<<"DS_m, 1<=m<="<<(prevseqlen+1)<<':';
 		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<DS(m);
