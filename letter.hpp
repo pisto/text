@@ -70,12 +70,10 @@ public:
 		return cur;
 	}
 
-	void operator delete[](void* mem){
+	void operator delete(void* mem){
 		for(letter* cur = reinterpret_cast<letter*>(mem); cur->val && cur->nextchoice != nochoice; cur++) delete[] cur->nextchoice;
 		if(mem != nochoice) free(mem);
 	}
-
-	void operator delete(void* mem){ delete[] reinterpret_cast<letter*>(mem); }
 
 }  __attribute__ ((packed));								//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
 
