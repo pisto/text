@@ -88,8 +88,10 @@ int main(int argc, char** argv){
 		}
 
 #define seqsofsize(sz) (inputlen - (sz) + 1)
+		real DSarray[prevseqlen+1];
+		//DS_m, 1<=m<=prevseqlen + 1, DS_i = hm[i-1]
+#define DS(m) (DSarray[(m)-1])
 		//calculate DS_m (= h_m)
-		real DS[prevseqlen+1];	//DS_m, 1<=m<=prevseqlen + 1, DS_i = hm[i-1]
 		for(u_intg m = 1; m<= prevseqlen+1; m++){
 			//calc DS by doing sum p(x|s)log(p(x|s)) over x recursively
 			function<real(letter*, u_intg, u_intg)> sum_p_x_s = [m,&sum_p_x_s](letter* choice, u_intg curseqlen, u_intg curseqoccurrences){
@@ -107,19 +109,19 @@ int main(int argc, char** argv){
 				else for(letter* l = choice; l->val; l++) tot+=sum_p_x_s(l->nextchoice, curseqlen+1, l->occurrences);
 				return tot;
 			};
-			DS[m-1]=sum_p_x_s(root, 0, 1)/(m==1?1:seqsofsize(m-1));
+			DS(m)=sum_p_x_s(root, 0, 1)/(m==1?1:seqsofsize(m-1));
 		}
 		//S_m, 1<=m<=prevseqlen+1
 #define blockentropy(m)({\
 			real Sm = 0;\
-			loopai(m) Sm+=DS[i];\
+			for(u_intg mi = 1; mi<=m; mi++) Sm+=DS(mi);\
 			Sm;\
 		})
 		//k_m, 1<=m<=prevseqlen+1
-#define k(m) (-DS[m-1]+(m==1?log(real(root->letterstotal())):DS[m-2]))
+#define k(m) (-DSarray[(m)-1]+((m)==1?log(real(root->letterstotal())):DSarray[(m)-2]))
 
 		cerr<<"DS_m, 1<=m<="<<(prevseqlen+1)<<':';
-		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<DS[m-1];
+		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<DS(m);
 		cerr<<"\nS_m, 1<=m<="<<(prevseqlen+1)<<':';
 		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<blockentropy(m);
 		cerr<<"\nk_m, 1<=m<="<<(prevseqlen+1)<<':';
