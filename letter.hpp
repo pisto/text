@@ -50,14 +50,19 @@ public:
 		return i;
 	}
 
+	u_intg occurrencestotal(){
+		u_intg tot = 0;
+		for(letter* cur = this; cur->val; tot+=cur->occurrences, cur++);
+		return tot;
+	}
+
 	letter* find(char val){
 		for(letter* cur = this; cur->val; cur++) if(cur->val == val) return cur;
 		return nullptr;
 	}
 
 	letter* chooserandom(){
-		u_intg o = 0;
-		for(letter* cur = this; cur->val; o+=cur->occurrences, cur++);
+		u_intg o = occurrencestotal();
 		if(!o) return nullptr;
 		o = random(o);
 		letter* cur = this;
