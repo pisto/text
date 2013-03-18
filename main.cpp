@@ -54,6 +54,7 @@ int main(int argc, char** argv){
 	istream& input = finput?finput:cin;
 
 	letter* root = letter::newroot();
+	unsigned int inputlen = 0;
 
 	try{
 		//learn
@@ -77,13 +78,14 @@ int main(int argc, char** argv){
 			for(size_t i=0; i<bufflen; i++) lastletter = letter::addoccurrence(root, lastletter, buffer[prevseqlen-bufflen+i]);
 			letter::addoccurrence(root, lastletter, ch);		//add p(ch|seq)
 			pushchar(ch);
+			inputlen++;
 		}
-		if(!root->letterstotal()){
+		if(inputlen<prevseqlen+1){
 			delete root;
-			throw runtime_error("No text inputed!");
+			throw runtime_error("Inputed text is too short to have even a single p(x|s)!");
 		}
 
-		//TODO print statistics
+
 
 		//generate text
 		bufflen = 0;
