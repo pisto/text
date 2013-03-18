@@ -94,22 +94,22 @@ int main(int argc, char** argv){
 		//calculate DS_m (= h_m)
 		for(u_intg m = 1; m<= prevseqlen+1; m++){
 			//calc DS by doing sum p(x|s)log(p(x|s)) over x recursively
-			function<real(letter*, u_intg, u_intg)> sum_p_x_s = [m,&sum_p_x_s](letter* choice, u_intg curseqlen, u_intg curseqoccurrences){
+			function<real(letter*, u_intg, u_intg)> sum_p_x_s = [&sum_p_x_s](letter* choice, u_intg needmore, u_intg weigth){
 				real tot = 0;
 				//if next choice is all the x in p(x|s)
-				if(curseqlen == m - 1){
+				if(!needmore){
 					real totoccs = choice->occurrencestotal();
 					for(letter* l = choice; l->val; l++){
 						real p = l->occurrences/totoccs;
 						tot-=p*log(p);
 					}
-					tot*=curseqoccurrences;		//weight for p(s)
+					tot*=weigth;
 				}
 				//else go down in the tree further
-				else for(letter* l = choice; l->val; l++) tot+=sum_p_x_s(l->nextchoice, curseqlen+1, l->occurrences);
+				else for(letter* l = choice; l->val; l++) tot+=sum_p_x_s(l->nextchoice, needmore-1, l->occurrences);	//weight for p(s)
 				return tot;
 			};
-			DS(m)=sum_p_x_s(root, 0, 1)/(m==1?1:seqsofsize(m-1));
+			DS(m)=sum_p_x_s(root, m-1, 1)/(m==1?1:seqsofsize(m-1));
 		}
 		//S_m, 1<=m<=prevseqlen+1
 #define blockentropy(m)({\
