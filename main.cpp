@@ -53,7 +53,7 @@ int main(int argc, char** argv){
 		finput.open(file);
 		if(!finput) throw invalid_argument("Cannot open file "+string(file));
 	}
-	istream& input = finput?finput:cin;
+	istream& input = finput.is_open()?finput:cin;
 
 	letter* root = letter::newroot();
 	u_intg inputlen = 0;
