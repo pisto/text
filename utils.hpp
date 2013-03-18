@@ -19,6 +19,7 @@ typedef std::make_signed<size_t>::type			s_size_t;
 typedef unsigned char uchar;
 
 #define PI 3.14159265358979323846L
+#define LN2 0.69314718055994530942L
 
 //looping
 #define loopa(v, m)		for(size_t v=0, m__=size_t(m); v<m__; v++)
