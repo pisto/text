@@ -6,13 +6,14 @@
 #include <cstring>
 #include <algorithm>
 #include <cmath>
+#include "utils.hpp"
 #include "letter.hpp"
 using namespace std;
 
 static bool lowercase = true;
 static char* allowedchars;
 static size_t prevseqlen = 10;
-static unsigned int generatedtextlen = 0;
+static u_intg generatedtextlen = 0;
 static bool abruptend = false, suddenbegin = false;
 static char* file = nullptr;
 
@@ -54,7 +55,7 @@ int main(int argc, char** argv){
 	istream& input = finput?finput:cin;
 
 	letter* root = letter::newroot();
-	unsigned int inputlen = 0;
+	u_intg inputlen = 0;
 
 	try{
 		//learn
@@ -75,7 +76,7 @@ int main(int argc, char** argv){
 			if(ignorechar(ch)) continue;
 			letter* lastletter = nullptr;
 			//sliding the sequence window creates new occurrences of shorter sequences (sseq) with length 0<l<previousseqlen
-			for(size_t i=0; i<bufflen; i++) lastletter = letter::addoccurrence(root, lastletter, buffer[prevseqlen-bufflen+i]);
+			loopai(bufflen) lastletter = letter::addoccurrence(root, lastletter, buffer[prevseqlen-bufflen+i]);
 			letter::addoccurrence(root, lastletter, ch);		//add p(ch|seq)
 			pushchar(ch);
 			inputlen++;
@@ -93,11 +94,11 @@ int main(int argc, char** argv){
 			memcpy(buffer+prevseqlen-2, ". ", 2);
 			bufflen = 2;
 		}
-		unsigned int written = 0;
+		u_intg written = 0;
 		while(generatedtextlen && (written<generatedtextlen || (abruptend?false:buffer[prevseqlen-1]!='.'))){
 			letter* lastinseq = nullptr;
 			//reconstruct the sequence used so far
-			for(size_t i=0; i<bufflen; i++) lastinseq = (lastinseq?lastinseq->nextchoice:root)->find(buffer[prevseqlen-bufflen+i]);
+			loopai(bufflen) lastinseq = (lastinseq?lastinseq->nextchoice:root)->find(buffer[prevseqlen-bufflen+i]);
 			letter* chosen = (lastinseq?lastinseq->nextchoice:root)->chooserandom();	//lastinseq can be null when we begin writing the text
 			if(!chosen){
 				//this happens if the sequence at the end of the text is unique. Start over with p(x)

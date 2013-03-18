@@ -1,10 +1,10 @@
-#include "random.hpp"
+#include "utils.hpp"
 #include <fstream>
 using namespace std;
 
 ifstream source("/dev/urandom");
 
-unsigned int random(unsigned int modulo){							//just doing random%modulo is not uniform.
+unsigned int random(unsigned int modulo){					//just doing random%modulo is not uniform.
 	unsigned int max = (0x100000000ULL/modulo)*modulo;		//round to integer number of modulo multiples
 	unsigned int r=0xFFFFFFFFU;
 	if(!max){												//if modulo is a power of 2 max is 0

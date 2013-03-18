@@ -1,7 +1,7 @@
 #ifndef LETTER_HPP_
 #define LETTER_HPP_
 
-#include "random.hpp"
+#include "utils.hpp"
 #include <cstdlib>
 
 /*
@@ -21,7 +21,7 @@ class letter{
 public:
 
 	char val;
-	unsigned int occurrences;
+	u_intg occurrences;
 	letter* nextchoice;
 
 	static letter* newroot(){ return nochoice; }		//p(x)
@@ -56,7 +56,7 @@ public:
 	}
 
 	letter* chooserandom(){
-		unsigned int o = 0;
+		u_intg o = 0;
 		for(letter* cur = this; cur->val; o+=cur->occurrences, cur++);
 		if(!o) return nullptr;
 		o = random(o);
