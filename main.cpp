@@ -61,10 +61,10 @@ int main(int argc, char** argv){
 		size_t bufflen = 0;
 		//push a character on top of buffer, shift down previos characters
 #define pushchar(ch) ({\
-		size_t copylen = bufflen-(bufflen==prevseqlen);\
-		memmove(buffer+prevseqlen-copylen-1, buffer+prevseqlen-copylen, copylen);\
-		buffer[prevseqlen-1]=(ch);\
-		bufflen = min(bufflen + 1, prevseqlen);\
+			size_t copylen = bufflen-(bufflen==prevseqlen);\
+			memmove(buffer+prevseqlen-copylen-1, buffer+prevseqlen-copylen, copylen);\
+			buffer[prevseqlen-1]=(ch);\
+			bufflen = min(bufflen + 1, prevseqlen);\
 		})
 
 		int ch_;
