@@ -34,7 +34,7 @@ public:
 			return l;
 		}
 		else{
-			int tot = choice->letterstotal();
+			size_t tot = choice->letterstotal();
 			choice = reinterpret_cast<letter*>(std::realloc(tot?choice:0, sizeof(letter)*(tot+1)+1));		//if tot==0 then base==emptychain, which must not be reallocated
 			choice[tot].val = val;
 			choice[tot].occurrences = 1;
@@ -44,8 +44,8 @@ public:
 		}
 	}
 
-	int letterstotal(){
-		int i = 0;
+	u_intg letterstotal(){
+		u_intg i = 0;
 		for(letter* cur = this; cur->val; cur++, i++);
 		return i;
 	}
