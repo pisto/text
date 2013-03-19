@@ -1,0 +1,100 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{breqn}
+
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{Application of simple information theory concepts to text analysis and automatic text generation.}
+\author{Lorenzo Pistone}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The aim of this paper is to show how simple information theory constructs, such as symbol sequences and correlation information, can be used to analyze texts, and possibly provide a simple algorithm to generate outputs analogous to the sample input text. I will first introduce briefly the quantities involved. Successively, I will explain the algorithm used to store efficiently the conditional probabilities $p(x | \sigma)$ (where $x$ is a symbol and $\sigma$ is the preceding sequence). Several texts are then analyzed as exemplification. Finally, I will discuss applicability and the limits of this kind of treatment.
+\end{abstract}
+
+\section{Theoretical introduction}
+
+The first step to analyze a symbol sequence, as a human written text, is to extend the concept of entropy to blocks of data. The fact that a change in the alphabet used to encode a sequence should not change the entropy, leads naturally to the definition of block entropy as
+
+\begin{dmath}
+S_m = -\sum_{x_1,...,x_m}p(x_1,...,x_m)\log p(x_1,...,x_m)
+\end{dmath}
+
+Considering an infinitely long symbol sequence, it is possible to define the entropy per symbol
+
+\begin{dmath}
+s = \lim_{m\rightarrow\infty}\frac{S_m}{m}
+\end{dmath}
+
+Another way to calculate the entropy per symbol is the mean entropy of the next symbol in the stream, knowing the past sequence and so using the conditional probability $p(x|\sigma)$, where $x$ is the new symbol given the past sequence $\sigma$ of length $m-1$:
+
+\begin{dmath}
+h_m = \left\langle -\sum_{x_m}p(x_m|x_1, ..., x_{m-1})\log p(x_m|x_1, ..., x_{m-1})\right\rangle_{x_1, ..., x_{m-1}} = -\sum_{x_1,...,x_{m-1}}\sum_{x_m}p(x_m|x_1, ..., x_{m-1})\log p(x_m|x_1, ..., x_{m-1}) = S_m - S_{m-1} = \Delta S_m
+\end{dmath}
+
+Then, by taking the limit $m\rightarrow\infty$, this quantity approaches to $s$. Defining $S_0 = 0$,we get $h_1 = S_1$.
+
+Finally, let us consider the relative information gained by observing a new symbol after the sequence, an event that changes our probability distribution, because longer correlation lengths can be detected. If we average this quantity over all the possible past sequences of length $m$ we obtain the definition of $\emph{correlation information} k_m$, which, with simple calculations, can be show to equal
+
+\begin{dmath}
+k_m = -\Delta S_m + \Delta S_{m-1}
+\end{dmath}
+
+$k_1$ is defined as the mean information that we get from changing our probability distribution that describes the stream from a uniform distribution to the actual distribution of single symbols $p(x)$,
+
+\begin{dmath}
+k_1 = K[P_1^{uniform}; P_1] = \log \nu - S_1
+\end{dmath}
+
+where $\nu$ is the number of symbols in the alphabet. It is easy to show that another expression for the entropy per symbol $s$ is
+
+\begin{dmath}
+s = \log \nu - \sum_{m=1}^\infty k_m = \log \nu - k_{corr}
+\end{dmath}
+
+where $k_{corr}$ is a measure of the total information located in the correlations.
+
+With these quantities it is possible to measure how much the knowledge of a past symbol sequence can help us in determining what symbol comes next. This can be useful for text generation, but also to develop compression algorithms.
+
+\section{Implementation}
+
+It is evident that all of the quantities described can be built from the various $\Delta S_m$, which in turn requires the calculation of $p(x|\sigma_{m-1})$ and $p(\sigma_{m-1})$.
+
+These probabilties are calculated as frequentist probabilities by parsing a sufficiently long input text. Besides obvious computation time limitations, this introduces a first constraint: to have a good statistics, one must input a text much larger than the maximum block of symbols considered, otherwise the probabilities will not be very accurate.
+
+A second problema that it is encountered when implementing the algorithm in practice is that if one attempts to store in memory the probability values for all the possible sequences of size $m$, then the used memory goes as $\nu^m$ where $\nu$ is the alphabet size, which becomes prohibitive very quickly if one uses the english alphabet. Yet, it is possible to exploit the fact that a lot of sequences do not appear in the input text, if that is not random but written in a human language.
+
+Following this reasoning, I implemented the structure to record the probabilities as a $\emph{trie}$. The $p(x)$ is a list of all the possible symbols, and the associated number of occurrences in the text, so that the probability is actually the number of occurrences of $x$ divided by the sum of occurrences of all the possible symbols. The structure that represents a symbol contains a link to a list of the successive choices for the next symbol. The latter implicitly assume that the first symbol $x$ has been observed before, so they equal to $p(y|x)$ (applying a similar normalization by the number of total occurrences of all the possible values of $y$).
+
+If one is interested instead in $p(yx)$, that is the probability of finding $x$ followed by $y$, it is sufficient to normalize the numbe of occurences to the total occurrences of all the possible sequences of two symbols: but since we built our probabilities by parsing a text of a certain length, then it is sufficient to divide by $l-1$, where $l$ is the length of the input, because that counts how many two symbols long sequences we have sampled. Of course, this is easily extended to sequences of length m with $l+1-m$.
+
+This simple scheme allows to save the in memory representation of the big number of newer observed sequences, because it's sufficient not to include a certain symbol in the choice.
+
+\end{document}
