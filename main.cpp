@@ -125,13 +125,8 @@ int main(int argc, char** argv){
 		cerr<<"\nS_m, 1<=m<="<<(prevseqlen+1)<<':';
 		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<blockentropy(m);
 		cerr<<"\nk_m, 1<=m<="<<(prevseqlen+1)<<':';
-		real kcorr = 0;
-		for(u_intg m = 1; m<=prevseqlen+1; m++){
-			real km = k(m);
-			kcorr+=km;
-			cerr<<' '<<km;
-		}
-		cerr<<"\ns = "<<(log(real(root->letterstotal()))/LN2-kcorr)<<'\n';
+		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<k(m);
+		cerr<<'\n';
 
 
 		//generate text
