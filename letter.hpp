@@ -35,7 +35,7 @@ public:
 		}
 		else{
 			size_t tot = choice->letterstotal();
-			choice = reinterpret_cast<letter*>(std::realloc(tot?choice:0, sizeof(letter)*(tot+1)+1));		//if tot==0 then base==emptychain, which must not be reallocated
+			choice = reinterpret_cast<letter*>(std::realloc(choice!=nochoice?choice:nullptr, sizeof(letter)*(tot+1)+1));
 			choice[tot].val = val;
 			choice[tot].occurrences = 1;
 			choice[tot].nextchoice = nochoice;
@@ -71,7 +71,8 @@ public:
 	}
 
 	void operator delete(void* mem){
-		for(letter* cur = reinterpret_cast<letter*>(mem); cur->val && cur->nextchoice != nochoice; cur++) delete[] cur->nextchoice;
+		for(letter* cur = reinterpret_cast<letter*>(mem); cur->val; cur++)
+			if(cur->nextchoice != nochoice) delete cur->nextchoice;
 		if(mem != nochoice) free(mem);
 	}
 
