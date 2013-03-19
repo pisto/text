@@ -120,13 +120,22 @@ int main(int argc, char** argv){
 		//k_m, 1<=m<=prevseqlen+1
 #define k(m) (-DSarray[(m)-1]+((m)==1?log(real(root->letterstotal()))/LN2:DSarray[(m)-2]))
 
-		cerr<<"DS_m, 1<=m<="<<(prevseqlen+1)<<':';
-		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<DS(m);
-		cerr<<"\nS_m, 1<=m<="<<(prevseqlen+1)<<':';
-		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<blockentropy(m);
-		cerr<<"\nk_m, 1<=m<="<<(prevseqlen+1)<<':';
-		for(u_intg m = 1; m<=prevseqlen+1; m++) cerr<<' '<<k(m);
-		cerr<<'\n';
+		cerr<<"DS = {";
+		for(u_intg m = 1; m<=prevseqlen+1; m++){
+			if(m!=1) cerr<<", ";
+			cerr<<'{'<<m<<", "<<DS(m)<<'}';
+		}
+		cerr<<"};\nS = {";
+		for(u_intg m = 1; m<=prevseqlen+1; m++){
+			if(m!=1) cerr<<", ";
+			cerr<<'{'<<m<<", "<<blockentropy(m)<<'}';
+		}
+		cerr<<"};\nk = {";
+		for(u_intg m = 1; m<=prevseqlen+1; m++){
+			if(m!=1) cerr<<", ";
+			cerr<<'{'<<m<<", "<<k(m)<<'}';
+		}
+		cerr<<"};\n";
 
 
 		//generate text
