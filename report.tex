@@ -1,51 +1,35 @@
-% !TEX TS-program = pdflatex
-% !TEX encoding = UTF-8 Unicode
+\documentclass[conference]{IEEEtran}
 
-% This is a simple template for a LaTeX document using the "article" class.
-% See "book", "report", "letter" for other types of document.
-
-\documentclass[11pt]{article} % use larger type; default would be 10pt
-
-\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
-
-%%% Examples of Article customizations
-% These packages are optional, depending whether you want the features they provide.
-% See the LaTeX Companion or other references for full information.
-
-%%% PAGE DIMENSIONS
-\usepackage{geometry} % to change the page dimensions
-\geometry{a4paper} % or letterpaper (US) or a5paper or....
-% \geometry{margin=2in} % for example, change the margins to 2 inches all round
-% \geometry{landscape} % set up the page for landscape
-%   read geometry.pdf for detailed page layout information
-
-\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{textcomp}
 \usepackage{breqn}
 
-
-%%% END Article customizations
-
-%%% The "real" document content comes below...
-
 \title{Application of simple information theory concepts to text analysis and automatic text generation.}
-\author{Lorenzo Pistone}
+\author{Lorenzo Pistone, 900926-T232, Göteborg University}
 %\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
 
 \begin{document}
+
 \maketitle
 
 \begin{abstract}
 The aim of this paper is to show how simple information theory constructs, such as symbol sequences and correlation information, can be used to analyze texts, and possibly provide a simple algorithm to generate outputs analogous to the sample input text. I will first introduce briefly the quantities involved. Successively, I will explain the algorithm used to store efficiently the conditional probabilities $p(x | \sigma)$ (where $x$ is a symbol and $\sigma$ is the preceding sequence). Several texts are then analyzed as exemplification. Finally, I will discuss applicability and the limits of this kind of treatment.
 \end{abstract}
 
+\IEEEpeerreviewmaketitle
+
 \section{Theoretical introduction}
 
 The first step to analyze a symbol sequence, as a human written text, is to extend the concept of entropy to blocks of data. The fact that a change in the alphabet used to encode a sequence should not change the entropy, leads naturally to the definition of block entropy as
 
 \begin{dmath}
-S_m = -\sum_{x_1,...,x_m}p(x_1,...,x_m)\log p(x_1,...,x_m)
+S_m = -\sum_{\sigma_m}p(\sigma_m)\log p(\sigma_m)
 \end{dmath}
+
+where $\sigma_m$ is a sequence of symbols of length $m$.
 
 Considering an infinitely long symbol sequence, it is possible to define the entropy per symbol
 
@@ -53,10 +37,10 @@ Considering an infinitely long symbol sequence, it is possible to define the ent
 s = \lim_{m\rightarrow\infty}\frac{S_m}{m}
 \end{dmath}
 
-Another way to calculate the entropy per symbol is the mean entropy of the next symbol in the stream, knowing the past sequence and so using the conditional probability $p(x|\sigma)$, where $x$ is the new symbol given the past sequence $\sigma$ of length $m-1$:
+Another way to calculate the entropy per symbol is the mean entropy of the next symbol in the stream, knowing the past sequence and so using the conditional probability $p(x|\sigma_{m-1})$, where $x$ is the new symbol given the past sequence $\sigma$ of length $m-1$:
 
 \begin{dmath}
-h_m = \left\langle -\sum_{x_m}p(x_m|x_1, ..., x_{m-1})\log p(x_m|x_1, ..., x_{m-1})\right\rangle_{x_1, ..., x_{m-1}} = -\sum_{x_1,...,x_{m-1}}p(x_1, ..., x_{m-1})\sum_{x_m}p(x_m|x_1, ..., x_{m-1})\log p(x_m|x_1, ..., x_{m-1}) = S_m - S_{m-1} = \Delta S_m
+h_m = \left\langle -\sum_{x}p(x|\sigma_{m-1})\log p(x|\sigma_{m-1})\right\rangle_{\sigma_{m-1}} = -\sum_{\sigma_{m-1}}p(\sigma_{m-1})\sum_{x}p(x|\sigma_{m-1})\log p(x|\sigma_{m-1}) = S_m - S_{m-1} = \Delta S_m
 \end{dmath}
 
 Then, by taking the limit $m\rightarrow\infty$, this quantity approaches to $s$. Defining $S_0 = 0$,we get $\Delta S_1 = S_1$.
