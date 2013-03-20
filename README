@@ -1,0 +1,20 @@
+	COMPILING
+
+The program is written in C++11, so it requires a fairly recent version of g++ or clang. It has been compiled succesfully with g++ 4.7.0, but according to the feature table by the respective publishers, the minimum compiler version required is clang 3.1 or g++ 4.6.
+Compile with the following command:
+
+	cd Release; make; cd ..
+
+
+	RUNNING
+
+	./Release/text [-l genlen] [-asu] [-v "allowed"] [-p prevseq] [-i file]
+
+-l genlen	Generate a text of length genlen
+-a		If not provided, the generated text len ends exactly after genlen characters, otherwise it generates at least genlen characters but then it waits for a full stop to appear before termination.
+-s		If not provided, begins with any character in the generated text, otherwise the algorithm is setup as if ". " was generated right before, so that the text is likely to start with a sentence beginning.
+-u		If not provided, always transform to lower case any character, otherwise don't perform the transformation.
+-v "allowed"	Filter out characters not in "allowed". The default for this option is "qwertyuiopasdfghjklzxcvbnm ?!,.:-'".
+-p prevseq	Limit the previous sequence (e.g., the length of s in p(x|s)) to prevseq characters. Default is 10.
+-i file		If provided, read from file, otherwise read from stdin.
+
