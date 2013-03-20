@@ -8,15 +8,13 @@
 
 \title{Application of simple information theory concepts to text analysis and automatic text generation.}
 \author{Lorenzo Pistone, 900926-T232, Göteborg University}
-%\date{} % Activate to display a given date or no date (if empty),
-         % otherwise the current date is printed 
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-The aim of this paper is to show how simple information theory constructs, such as symbol sequences and correlation information, can be used to analyze texts, and possibly provide a simple algorithm to generate outputs analogous to the sample input text. I will first introduce briefly the quantities involved. Successively, I will explain the algorithm used to store efficiently the conditional probabilities $p(x | \sigma)$ (where $x$ is a symbol and $\sigma$ is the preceding sequence). Several texts are then analyzed as exemplification. Finally, I will discuss applicability and the limits of this kind of treatment.
+The aim of this paper is to show how simple information theory constructs, such as symbol sequences and correlation information, can be used to analyze texts, and possibly provide a simple algorithm to generate outputs analogous to the sample input text. I will first introduce briefly the quantities involved. Successively, I will explain the algorithm used to store efficiently the conditional probabilities $p(x | \sigma)$ (where $x$ is a symbol and $\sigma$ is the preceding sequence). A text will be analyzed as exemplification. Finally, I will discuss applicability and the limits of this kind of treatment.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -83,7 +81,53 @@ This simple scheme allows to save the in memory representation of the big number
 
 The generation of the new text is performed by choosing a symbol with weights given by $p(x|\sigma)$. It is important to underline the effect of the finiteness of the input text though. It is possible that a certain sequence $\sigma$ of length $m_{MAX}$, the biggest size of the block considered, appears \emph{only} at the end of the inputted text. If the algorithms happens to choose that sequence, after that it will be stuck, because there is no knowledge on what possible sequence could follow. If the length of the input text goes to infinity, this happens with probability that goes to zero. Yet, the algorithm, if such case is detected, will basically start over as if a new text is to be generated after the sequence.
 
-\section{Test cases}
+\section{Test case, \emph{The Lord Of The Rings}}
+
+The selected test was \emph{The Lord Of The Rings} by J. R. R. Tolkien. I chose this text because it provides a good long sample, but also because being a narrative book it has some repetitive patterns (like the beginning of speeches).
+
+The algorithm has been run by first translating all the accented vowels to the simple form plu an apostrophe, and newlines have been stripped. The characters included in the alphabet were the English alphabet (distinguishing upper and lower case), whitespace, and some common punctuation characters (,.;:-?!'). The maximum block length was 51. The plot of $S_m$ follows.
+
+\begin{figure}[h]
+\centering
+\includegraphics{Sm.pdf}
+\caption{$S_m$ for the whole text}
+\end{figure}
+
+The block entropy as expected increases as the block length is enlarged. Contrary to the theory, there is a remarkable finite effect. In fact, if one plots all the calculated range of the block size, one gets the following plot.
+
+\begin{figure}[h]
+\centering
+\includegraphics{Sm-extend.pdf}
+\caption{$S_m$ for the whole text, extended range}
+\end{figure}
+
+After $m \simeq 10$, the block entropy seems to reach a maximum. This leads to a very low entropy per symbol $s$. The explanation is that with blocks of that length, it is very easy for humans to guess what's the next letter, and this is of course the same for the algorithm, hence the next symbol has a very low entropy. This shows the limit of interpreting a human written text is hardly comparable to a stream of symbols, which is one of the assumptions of information theory: this problem will be examined in the next section.
+
+Here follow some lines of generated text for different lengths of allowed ``look-back'' (e.g., $m$ in $p(x|\sigma_m)$), from 1 to 11.
+
+\begin{quote}
+1. \emph{t wamsthe d pe th Ho und, t willd tordoum m aneral orre she s th theay. th, avinlabowerolamernd t Sale rbe senithend.}
+
+3. \emph{It change a later about tween deal fling.' 'What downs nowind the mong of the ridge to the Many may own thing a likely prefuge fless. Night. Sam!' 'My don't days therbs of which year up, anyway. Boroming.}
+
+5. \emph{Do you will find it will swords nor ever befell as he cast found before come blindfold, and little his possessed or ignorance the Green', said Frodo forward that has fall of Frodo sat down and ember.}
+
+7. \emph{He was not see how this place.' 'I dare say you not go far.' 'On foot?' cried Pippin. It would not speak more of a hole; but there were set watched the great wolves.}
+
+9. \emph{A great deal from the Shadowy Mountains and laden wains. All people. After they had little faith and high-seat, and then we must go', said Faramir sat down rubbing his speech, and thought secure.}
+
+11. \emph{Darkness came and wings immortal made for him, and without him, and sucked his teeth; and then he remember - if I had seen you before me, if you wish, tell me of this broad hill-back in front.}
+\end{quote}
+
+As the block size is increased, grammar is more and more correct. Syntax gets better, but even at big block sizes it is somewhat faulty. Anyway, most of the time the generated sentences do not make sense.
+
+If one selects a very big block, like 25, one does not get anymore a random text, but simply snippet of the imput text start being copied. For example one gets
+
+\begin{quote}
+25. \emph{The Bree-folk called them Rangers, and knew nothing of their origin. They were taller and darker than the Men of Bree and were believed to have strange powers of sight and hearing, and to understand the languages of beasts and birds.}
+\end{quote}
+
+which is a verbatim quote of one of the first chapters. This happens for the same reason for which the entropy does not appear to go to infinity in the extended range graph.
 
 \section{Applicability and limits of the method}
 

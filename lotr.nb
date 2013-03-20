@@ -1,0 +1,176 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      5436,        166]
+NotebookOptionsPosition[      5201,        153]
+NotebookOutlinePosition[      5536,        168]
+CellTagsIndexPosition[      5493,        165]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"1", ",", "4.36868"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"2", ",", "7.78551"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"3", ",", "10.4482"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"4", ",", "12.5456"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"5", ",", "14.3044"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"6", ",", "15.8218"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"7", ",", "17.1092"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"8", ",", "18.1712"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"9", ",", "19.0125"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"10", ",", "19.6556"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"11", ",", "20.1342"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"12", ",", "20.4788"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"13", ",", "20.7196"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"14", ",", "20.8874"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"15", ",", "21.0032"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"16", ",", "21.0828"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"17", ",", "21.1376"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"18", ",", "21.1754"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"19", ",", "21.2013"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"20", ",", "21.219"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"21", ",", "21.231"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"22", ",", "21.2392"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"23", ",", "21.2449"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"24", ",", "21.2487"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"25", ",", "21.2514"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"26", ",", "21.2533"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"27", ",", "21.2546"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"28", ",", "21.2554"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"29", ",", "21.2561"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"30", ",", "21.2565"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"31", ",", "21.2568"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"32", ",", "21.2571"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"33", ",", "21.2573"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"34", ",", "21.2574"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"35", ",", "21.2575"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"36", ",", "21.2576"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"37", ",", "21.2577"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"38", ",", "21.2578"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"39", ",", "21.2578"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"40", ",", "21.2579"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"41", ",", "21.2579"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"42", ",", "21.258"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"43", ",", "21.258"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"44", ",", "21.258"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"45", ",", "21.258"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"46", ",", "21.2581"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"47", ",", "21.2581"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"48", ",", "21.2581"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"49", ",", "21.2582"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"50", ",", "21.2582"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"51", ",", "21.2582"}], "}"}]}], "}"}], ";"}], "\n", 
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"%", "[", 
+    RowBox[{"[", 
+     RowBox[{";;", "13"}], "]"}], "]"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<m\>\"", ",", "\"\<\!\(\*SubscriptBox[\(S\), \(m\)]\)\>\""}],
+      "}"}]}], ",", 
+   RowBox[{"Joined", "\[Rule]", "True"}], ",", 
+   RowBox[{"InterpolationOrder", "\[Rule]", "1"}], ",", 
+   RowBox[{"Mesh", "\[Rule]", "All"}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], "\n", 
+ RowBox[{"ListPlot", "[", 
+  RowBox[{"%%", ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<m\>\"", ",", "\"\<\!\(\*SubscriptBox[\(S\), \(m\)]\)\>\""}],
+      "}"}]}], ",", 
+   RowBox[{"Joined", "\[Rule]", "True"}], ",", 
+   RowBox[{"InterpolationOrder", "\[Rule]", "1"}], ",", 
+   RowBox[{"Mesh", "\[Rule]", "All"}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.572772992827364*^9, 3.572773003415827*^9}, {
+  3.5727731570517073`*^9, 3.572773371686412*^9}, {3.572773646253304*^9, 
+  3.572773647137686*^9}, {3.572776238059133*^9, 3.572776243120434*^9}}]
+},
+WindowSize->{1366, 714},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Linux x86 (64-bit) (October 10, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 4640, 131, 164, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
