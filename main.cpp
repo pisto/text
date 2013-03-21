@@ -101,7 +101,7 @@ int main(int argc, char** argv){
 					real totoccs = choice->occurrencestotal();
 					for(letter* l = choice; l->val; l++){
 						real p = l->occurrences/totoccs;
-						tot-=p*log(p)/LN2;
+						tot-=p*log(p);
 					}
 					tot*=weigth;
 				}
@@ -109,7 +109,7 @@ int main(int argc, char** argv){
 				else for(letter* l = choice; l->val; l++) tot+=sum_p_x_s(l->nextchoice, needmore-1, l->occurrences);	//weight for p(s)
 				return tot;
 			};
-			DS(m)=sum_p_x_s(root, m-1, 1)/(m==1?1:seqsofsize(m-1));
+			DS(m)=(sum_p_x_s(root, m-1, 1)/(m==1?1:seqsofsize(m-1)))/LN2;
 		}
 		//S_m, 1<=m<=prevseqlen+1
 #define blockentropy(m)({\
