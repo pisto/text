@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Debug/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -43,7 +44,7 @@ all: text
 text: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ $(CXXFLAGS) -m32 -std=c++0x -o "text" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -std=c++11 -o "text" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -40,6 +40,4 @@ typedef unsigned char uchar;
 #define looprj(m)		loopr(j, m)
 #define looprk(m)		loopr(k, m)
 
-unsigned int random(unsigned int modulo);
-
 #endif /* RANDOM_HPP_ */

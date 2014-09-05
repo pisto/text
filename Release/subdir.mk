@@ -4,26 +4,20 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../letter.cpp \
-../main.cpp \
-../random.cpp 
+../main.cpp 
 
 OBJS += \
-./letter.o \
-./main.o \
-./random.o 
+./main.o 
 
 CPP_DEPS += \
-./letter.d \
-./main.d \
-./random.d 
+./main.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -O3 -ffast-math -Wall -c -fmessage-length=0 -march=native -m32 $(CXXFLAGS) -std=c++0x -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	g++ -O0 -Ofast -ggdb3 -Wall -std=c++11 -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

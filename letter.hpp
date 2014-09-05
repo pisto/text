@@ -3,6 +3,7 @@
 
 #include "utils.hpp"
 #include <cstdlib>
+#include <random>
 
 /*
  * Letters tree.
@@ -13,10 +14,7 @@
  */
 class letter{
 
-	static const char emptychain_buff;	//Terminators (val == 0) have only one byte allocated, save 8 bytes on 32-bit machine.
-	static letter* nochoice;
-
-	letter() = delete;
+	letter(): val(0) {}
 
 public:
 
@@ -24,10 +22,13 @@ public:
 	u_intg occurrences;
 	letter* nextchoice;
 
-	static letter* newroot(){ return nochoice; }		//p(x)
+	static letter* empty(){
+		static letter nochoice;
+		return &nochoice;
+	}
 
 	static letter* addoccurrence(letter*& root, letter* lastletter, char val){
-		letter*& choice = reinterpret_cast<letter*&>(lastletter?lastletter->nextchoice:root);
+		letter*& choice = reinterpret_cast<letter*&>(lastletter ? lastletter->nextchoice : root);
 		letter* l = choice->find(val);
 		if(l){
 			l->occurrences++;
@@ -35,12 +36,12 @@ public:
 		}
 		else{
 			size_t tot = choice->letterstotal();
-			choice = reinterpret_cast<letter*>(std::realloc(choice!=nochoice?choice:nullptr, sizeof(letter)*(tot+1)+1));
+			choice = reinterpret_cast<letter*>(std::realloc(choice != empty() ? choice : 0, sizeof(letter) * (tot + 1) + 1));
 			choice[tot].val = val;
 			choice[tot].occurrences = 1;
-			choice[tot].nextchoice = nochoice;
-			choice[tot+1].val = 0;
-			return choice+tot;
+			choice[tot].nextchoice = empty();
+			choice[tot + 1].val = 0;
+			return choice + tot;
 		}
 	}
 
@@ -52,28 +53,29 @@ public:
 
 	u_intg occurrencestotal(){
 		u_intg tot = 0;
-		for(letter* cur = this; cur->val; tot+=cur->occurrences, cur++);
+		for(letter* cur = this; cur->val; tot += cur->occurrences, cur++);
 		return tot;
 	}
 
 	letter* find(char val){
 		for(letter* cur = this; cur->val; cur++) if(cur->val == val) return cur;
-		return nullptr;
+		return 0;
 	}
 
 	letter* chooserandom(){
 		u_intg o = occurrencestotal();
-		if(!o) return nullptr;
-		o = random(o);
+		if(!o) return 0;
+		static std::mt19937 generator((std::random_device())());
+		o = std::uniform_int_distribution<u_intg>(0, o - 1)(generator);
 		letter* cur = this;
-		for(; o>=cur->occurrences; o-=cur->occurrences, cur++);
+		while(o >= cur->occurrences) o -= cur->occurrences, cur++;
 		return cur;
 	}
 
 	void operator delete(void* mem){
 		for(letter* cur = reinterpret_cast<letter*>(mem); cur->val; cur++)
-			if(cur->nextchoice != nochoice) delete cur->nextchoice;
-		if(mem != nochoice) free(mem);
+			if(cur->nextchoice != empty()) delete cur->nextchoice;
+		if(mem != empty()) free(mem);
 	}
 
 }  __attribute__ ((packed));								//Prevent padding done by the compiler, as the main constraint here is memory, not speed.
